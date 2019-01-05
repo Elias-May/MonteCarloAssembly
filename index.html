@@ -12,15 +12,19 @@
 
 			<div>
 				<span> Rows: </span>
-				<input type="text" id="rows" name="rows" value="4" maxlength="2"/>
+				<input type="text" id="rows" name="rows" value="20" maxlength="2"/>
 			</div>
 			<div>
 				<span> Columns: </span>
-				<input type="text" id="cols" name="cols" value="4" maxlength="2"/>
+				<input type="text" id="cols" name="cols" value="20" maxlength="2"/>
 			</div>
 			<div>
 				<span> Distribution: </span>
-				<input type="text" id="dist" name="dist" value="0.5"/>
+				<input type="text" id="dist" name="dist" value="0.2"/>
+			</div>
+			<div>
+				<span> Delta: </span>
+				<input type="text" id="delta" name="delta" value="10"/>
 			</div>
 			<div>
 				<span> Molecule Type: </span>
@@ -38,8 +42,8 @@
 				Canvas not available.
 			</canvas>
 			<div>
-				<input type="text" id="txtSpeed" name="txtSpeed" value="20" maxlength="2"/>
-				<input type="button" value="Draw" onclick="">
+				<input type="text" id="steps" name="steps" value="1">
+				<input type="button" value="Go" onclick="next()">
 				<input type="button" value="Quit" onclick="location.reload();">
 			</div>
     </div>

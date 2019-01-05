@@ -2,28 +2,15 @@ var num_rows = null;
     num_cols = null;
     block_size = null;
     concentration = null;
+    delta = null;
+    steps = null;
     canv = null;
     ctx = null;
     game_board = null;
     mtype = null;
     o_img = null;
-
-/*let Molecule = class {
-
-  constructor(type) {
-    if (type=="o"){
-      this.type = type;
-      this.n = 1;
-      this.e = 1;
-      this.s = 1;
-      this.w = 1;
-    }
-    this.flip();
-  }
-  flip(){
-    //todo scramble positions
-  }
-}*/
+    h1_img = null;
+    h0_img = null;
 
 function Molecule(type){
   if (type=="o"){
@@ -43,10 +30,108 @@ function Molecule(type){
   this.flip();
 }
 Molecule.prototype.flip = function() {
+  var o_n = this.n;
+  var o_e = this.e;
+  var o_s = this.s;
+  var o_w = this.w;
+  var ran = random(1,4);
+  if (ran == 1){
+    this.n = o_e;
+    this.e = o_s;
+    this.s = o_w;
+    this.w = o_n;
+  }
+  if (ran == 2){
+    this.n = o_s;
+    this.e = o_w;
+    this.s = o_n;
+    this.w = o_e;
+  }
+  if (ran == 3){
+    this.n = o_w;
+    this.e = o_n;
+    this.s = o_e;
+    this.w = o_s;
+  }
 };
 Molecule.prototype.toString = function() {
   return this.n + "" + this.e + "" + this.s + "" + this.w + " ";
   return this.type;
+}
+
+function next(){
+  steps = $("#steps").val();
+  for (x = 0; x < steps; x++) {
+    doStep();
+  }
+  draw();
+}
+
+function doStep(){
+  //select random Molecule
+  var flag = true;
+  while(flag){
+    var or_x = random(0, game_board.length);
+    var or_y = random(0, game_board[0].length);
+    if (game_board[or_x][or_y]!=null){
+      flag = false;
+    }
+  }
+
+  /*console.log("----------------dostep----------------------");
+  console.log("Origional: " + game_board[or_x][or_y]);
+  console.log("Origional: " + or_x + ":" + or_y);*/
+
+  var m1 = game_board[or_x][or_y];
+  var m2 = new Molecule(game_board[or_x][or_y].type);
+  game_board[or_x][or_y] = null;
+
+  var potential_spots = [];
+  potential_spots.push([or_x, or_y]);
+  if (getSquareMol(or_x, or_y, 'n')==null){
+    potential_spots.push(getSquare(or_x, or_y, 'n'));
+  }
+  if (getSquareMol(or_x, or_y, 'e')==null){
+    potential_spots.push(getSquare(or_x, or_y, 'e'));
+  }
+  if (getSquareMol(or_x, or_y, 's')==null){
+    potential_spots.push(getSquare(or_x, or_y, 's'));
+  }
+  if (getSquareMol(or_x, or_y, 'w')==null){
+    potential_spots.push(getSquare(or_x, or_y, 'w'));
+  }
+
+  var r = random(0, potential_spots.length - 1);
+  var spot = potential_spots[r];
+
+  var o_energy = calcEnergy(or_x, or_y, m1);
+  var n_energy = calcEnergy(spot[0], spot[1], m2);
+  var change_energy = o_energy - n_energy;
+
+  var odds = Math.pow(Math.E, -change_energy * delta);
+  var roll = Math.random();
+  if (roll < odds){
+    //console.log("HAPPENED")
+    //molecule moves
+
+
+    game_board[spot[0]][spot[1]] = m2;
+  }else{
+    game_board[or_x][or_y] = m1;
+  }
+
+
+
+  /*console.log("Potential spots: " + potential_spots);
+  console.log("Spot: " + spot);
+
+  console.log("m2: " + m2);
+  console.log("O Energy: " + o_energy);
+  console.log("N Energy: " + n_energy);
+  console.log("Odds: " + odds);*/
+
+
+
 }
 
 function start(){
@@ -57,6 +142,7 @@ function start(){
   num_rows = $("#rows").val();
   num_cols = $("#cols").val();
   concentration = $("#dist").val();
+  delta = $("#delta").val();
   mtype = $("#mtype").val();
 
   o_img = new Image();
@@ -81,9 +167,10 @@ function start(){
 }
 
 function draw(){
+  ctx.clearRect(0, 0, canv.width, canv.height);
   drawMolecules();
   drawBoard();
-  debug();
+  //debug();
 }
 
 function drawBoard(){
