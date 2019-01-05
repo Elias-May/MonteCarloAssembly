@@ -1,1 +1,28 @@
-1
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Monte Carlo Assembly</title>
+		<script src="jquery-3.3.1.min.js"></script>
+		<script src="logic.js"></script>
+	</head>
+	<body>
+
+		<div id='config'>
+			<input type="button" value="Start" onclick="start();">
+    </div>
+
+    <div id='sim' style="display:none;">
+			<canvas id="canv" width="800" height="800">
+				Canvas not available.
+			</canvas>
+			<div>
+				<input type="text" id="txtSpeed" name="txtSpeed" value="20" maxlength="2"/>
+				<input type="button" value="Draw" onclick="">
+				<input type="button" value="Quit" onclick="location.reload();">
+			</div>
+    </div>
+
+
+	</body>
+</html>
