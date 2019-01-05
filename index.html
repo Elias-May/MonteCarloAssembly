@@ -7,13 +7,25 @@
 		<script src="logic.js"></script>
 	</head>
 	<body>
-
+		<h1> Monte Carlo Assembly </h5>
 		<div id='config'>
+			<div>
+				<span> Rows: </span>
+				<input type="text" id="rows" name="rows" value="8" maxlength="2"/>
+			</div>
+			<div>
+				<span> Columns: </span>
+				<input type="text" id="cols" name="cols" value="8" maxlength="2"/>
+			</div>
+			<div>
+				<span> Distribution: </span>
+				<input type="text" id="dist" name="dist" value="0.5"/>
+			</div>
 			<input type="button" value="Start" onclick="start();">
     </div>
 
     <div id='sim' style="display:none;">
-			<canvas id="canv" width="800" height="800">
+			<canvas id="canv" width="800" height="800" style="border:1px solid #000000;">
 				Canvas not available.
 			</canvas>
 			<div>
