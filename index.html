@@ -9,19 +9,28 @@
 	<body>
 		<h1> Monte Carlo Assembly </h5>
 		<div id='config'>
+
 			<div>
 				<span> Rows: </span>
-				<input type="text" id="rows" name="rows" value="8" maxlength="2"/>
+				<input type="text" id="rows" name="rows" value="3" maxlength="2"/>
 			</div>
 			<div>
 				<span> Columns: </span>
-				<input type="text" id="cols" name="cols" value="8" maxlength="2"/>
+				<input type="text" id="cols" name="cols" value="3" maxlength="2"/>
 			</div>
 			<div>
 				<span> Distribution: </span>
 				<input type="text" id="dist" name="dist" value="0.5"/>
 			</div>
+			<div>
+				<span> Molecule Type: </span>
+				<input type="text" id="mtype" name="mtype" value="o"/>
+			</div>
+
+
+
 			<input type="button" value="Start" onclick="start();">
+
     </div>
 
     <div id='sim' style="display:none;">
