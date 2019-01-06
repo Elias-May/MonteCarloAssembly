@@ -109,6 +109,27 @@ function Molecule(type){
     this.s = 1;
     this.w = 0;
   }
+  if (type=="r"){
+    this.type = type;
+    this.n = 1;
+    this.e = 1;
+    this.s = 0;
+    this.w = 0;
+  }
+  if (type=="k"){
+    this.type = type;
+    this.n = 1;
+    this.e = 0;
+    this.s = 0;
+    this.w = 0;
+  }
+  if (type=="u"){
+    this.type = type;
+    this.n = 1;
+    this.e = 1;
+    this.s = 0;
+    this.w = 1;
+  }
   this.flip();
 }
 Molecule.prototype.flip = function() {
@@ -262,10 +283,42 @@ function start(){
   if (document.getElementById('r').checked) {
     mtype = 'r'
   }
+  if (document.getElementById('k').checked) {
+    mtype = 'k'
+  }
+  if (document.getElementById('u').checked) {
+    mtype = 'u'
+  }
 
 
   o_img = new Image();
   o_img.src = 'o.png'
+  r0_img = new Image();
+  r0_img.src = 'r0.png'
+  r1_img = new Image();
+  r1_img.src = 'r1.png'
+  r2_img = new Image();
+  r2_img.src = 'r2.png'
+  r3_img = new Image();
+  r3_img.src = 'r3.png'
+  k0_img = new Image();
+  k0_img.src = 'k0.png'
+  k1_img = new Image();
+  k1_img.src = 'k1.png'
+  k2_img = new Image();
+  k2_img.src = 'k2.png'
+  k3_img = new Image();
+  k3_img.src = 'k3.png'
+  u0_img = new Image();
+  u0_img.src = 'u0.png'
+  u1_img = new Image();
+  u1_img.src = 'u1.png'
+  u2_img = new Image();
+  u2_img.src = 'u2.png'
+  u3_img = new Image();
+  u3_img.src = 'u3.png'
+
+
   h1_img = new Image();
   h1_img.src = 'h1.png'
   h0_img = new Image();
@@ -350,6 +403,52 @@ function drawMolecule(x, y){
       ctx.drawImage(h1_img, x * block_size, y * block_size, block_size, block_size);
     }
   }
+  if (m.type == 'r'){
+    if (m.n == 1 && m.e == 1){
+      ctx.drawImage(r0_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.e == 1 && m.s == 1){
+      ctx.drawImage(r1_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.s == 1 && m.w == 1){
+      ctx.drawImage(r2_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.n == 1 && m.w == 1){
+      ctx.drawImage(r3_img, x * block_size, y * block_size, block_size, block_size);
+    }
+  }
+
+  if (m.type == 'k'){
+    if (m.n == 1){
+      ctx.drawImage(k0_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.e == 1){
+      ctx.drawImage(k1_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.s == 1){
+      ctx.drawImage(k2_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.w == 1){
+      ctx.drawImage(k3_img, x * block_size, y * block_size, block_size, block_size);
+    }
+  }
+
+  if (m.type == 'u'){
+    if (m.s == 0){
+      ctx.drawImage(u0_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.w == 0){
+      ctx.drawImage(u1_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.n == 0){
+      ctx.drawImage(u2_img, x * block_size, y * block_size, block_size, block_size);
+    }
+    if (m.e == 0){
+      ctx.drawImage(u3_img, x * block_size, y * block_size, block_size, block_size);
+    }
+  }
+
+
   return 1;
 }
 
