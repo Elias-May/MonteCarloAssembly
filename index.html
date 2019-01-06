@@ -4,47 +4,96 @@
 		<meta charset="utf-8" />
 		<title>Monte Carlo Assembly</title>
 		<script src="jquery-3.3.1.min.js"></script>
+		<script src="jquery-ui.min.js"></script>
+		<script src="bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
 		<script src="logic.js"></script>
 	</head>
 	<body>
-		<h1> Monte Carlo Assembly </h5>
-		<div id='config'>
+		<h1 style="margin: 10px;text-align: center;"> Monte Carlo Assembly </h5>
+		<div id='config' style="margin: auto;text-align: center;">
 
-			<div>
-				<span> Rows: </span>
-				<input type="text" id="rows" name="rows" value="20" maxlength="2"/>
-			</div>
-			<div>
-				<span> Columns: </span>
-				<input type="text" id="cols" name="cols" value="20" maxlength="2"/>
-			</div>
-			<div>
-				<span> Distribution: </span>
-				<input type="text" id="dist" name="dist" value="0.2"/>
-			</div>
-			<div>
-				<span> Delta: </span>
-				<input type="text" id="delta" name="delta" value="10"/>
-			</div>
-			<div>
-				<span> Molecule Type: </span>
-				<input type="text" id="mtype" name="mtype" value="h"/>
-			</div>
+			<input class="value_slider" id="row_slider" type="range" min="1" value="20" max="100" step="1">
 
 
+			<span class="value_container" id="row_container">
+				<span style="margin-left: 5px;">Rows:</span>
+				<span class="valuebox" id="row"></span>
+			</span>
 
-			<input type="button" value="Start" onclick="start();">
+			<br>
+			<input class="value_slider" id="col_slider" type="range" min="1" value="20" max="100" step="1">
+
+			<span class="value_container" id="col_container">
+				<span style="margin-left: 5px;">Columns:</span>
+				<span class="valuebox" id="col"></span>
+			</span>
+
+			<br>
+			<input class="value_slider" id="conc_slider" type="range" min="0" value="0.2" max="1" step="0.05">
+
+			<span class="value_container" id="conc_container">
+				<span style="margin-left: 5px;">Concentration:</span>
+				<span class="valuebox" id="conc"></span>
+			</span>
+
+			<br>
+			<span> Molecule Type </span>
+			<br>
+			<input style="margin-left:10px" type="radio" name="molecule" id="o" value="o" checked> O
+  		<input style="margin-left:10px" type="radio" name="molecule" id="h" value="h"> H
+  		<input style="margin-left:10px" type="radio" name="molecule" id="r" value="r"> R
+
+
+
+
+
+			<input style="margin-left:10px" type="button" value="Start" onclick="start();">
 
     </div>
 
-    <div id='sim' style="display:none;">
+    <div id='sim' style="display:none;margin: auto;text-align: center;">
 			<canvas id="canv" width="800" height="800" style="border:1px solid #000000;">
 				Canvas not available.
 			</canvas>
 			<div>
-				<input type="text" id="steps" name="steps" value="1">
-				<input type="button" value="Go" onclick="next()">
-				<input type="button" value="Quit" onclick="location.reload();">
+
+
+				<input id="delta_slider" type="range" min="0" value="7" max="9" step="1">
+
+				<span id="delta_container">
+					<span style="margin-left: 5px;">Delta:</span>
+					<span id="delta"></span>
+				</span>
+
+				<input id="step_slider" type="range" min="0" value="0" max="6" step="1">
+
+				<span id="step_container">
+					<span style="margin-left: 5px;">Steps:</span>
+					<span id="steps"></span>
+				</span>
+
+				<button type="button" onclick="play()" id="play_button" class="btn btn-default btn-sm">
+	        <span class="glyphicon glyphicon-play"></span> Run
+	      </button>
+				<button type="button" onclick="pause()" id="pause_button" style="display:none;" class="btn btn-default btn-sm">
+	        <span class="glyphicon glyphicon-pause"></span> Pause
+	      </button>
+				<button type="button" class="btn btn-default btn-sm" onclick="location.reload();">
+	        <span class="glyphicon glyphicon-log-out"></span> Quit
+	      </button>
+
+				<input id="speed_slider" type="range" min="0" value="5" max="5" step="1">
+
+				<span id="speed_container">
+					<span style="margin-left: 5px;">Speed:</span>
+					<span id="speed"></span>
+				</span>
+
 			</div>
     </div>
 

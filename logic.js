@@ -1,3 +1,81 @@
+$( document ).ready(function() {
+  var delta_values = [0,0.5,1,2,3,4,5,6,8,10];    //values to step to
+
+  var delta_slider = document.getElementById('delta_slider'),
+     delta = document.getElementById('delta');
+
+  delta_slider.oninput = function(){
+      delta.innerHTML = delta_values[this.value];
+  };
+  delta_slider.oninput(); //set default value
+
+  var step_values = [1,10,100,1000,10000,100000,1000000];    //values to step to
+
+  var step_slider = document.getElementById('step_slider'),
+     steps = document.getElementById('steps');
+
+  step_slider.oninput = function(){
+      steps.innerHTML = step_values[this.value];
+  };
+  step_slider.oninput();
+
+
+
+  var speed_values = [200, 100, 50, 30, 10, 0];    //values to step to
+
+  var speed_slider = document.getElementById('speed_slider'),
+     speed2 = document.getElementById('speed');
+
+  speed_slider.oninput = function(){
+      speed2.innerHTML = parseInt(this.value) + 1;
+      speed = speed_values[this.value];
+      if (playing){
+        clearInterval(interval)
+        interval = setInterval(next, speed);
+      }
+  };
+  speed_slider.oninput(); //set default value
+
+
+  var row_slider = document.getElementById('row_slider'),
+     rows = document.getElementById('row');
+
+  row_slider.oninput = function(){
+      row.innerHTML = this.value;
+  };
+  row_slider.oninput();
+
+  var col_slider = document.getElementById('col_slider'),
+     cols = document.getElementById('col');
+
+  col_slider.oninput = function(){
+      col.innerHTML = this.value;
+  };
+  col_slider.oninput();
+
+  var conc_slider = document.getElementById('conc_slider'),
+     conc = document.getElementById('conc');
+
+  conc_slider.oninput = function(){
+      conc.innerHTML = this.value;
+  };
+  conc_slider.oninput();
+
+
+
+
+  var col_slider = document.getElementById('col_slider'),
+     cols = document.getElementById('col');
+
+  col_slider.oninput = function(){
+      col.innerHTML = this.value;
+  };
+  col_slider.oninput();
+});
+
+
+
+
 var num_rows = null;
     num_cols = null;
     block_size = null;
@@ -11,6 +89,10 @@ var num_rows = null;
     o_img = null;
     h1_img = null;
     h0_img = null;
+    debug = null;
+    speed = 0;
+    interval = null
+    playing = false;
 
 function Molecule(type){
   if (type=="o"){
@@ -59,8 +141,27 @@ Molecule.prototype.toString = function() {
   return this.type;
 }
 
+function play(){
+  interval = setInterval(next, speed);
+  playing = true;
+  $("#play_button").hide();
+  $("#pause_button").show();
+}
+function pause(){
+  clearInterval(interval)
+  playing = false;
+  $("#play_button").show();
+  $("#pause_button").hide();
+}
+
 function next(){
-  steps = $("#steps").val();
+  steps = $("#steps").html();
+  delta = $("#delta").html();
+  if ($("#debug").val() == 1){
+    debug = true;
+  }else{
+    debug = false;
+  }
   for (x = 0; x < steps; x++) {
     doStep();
   }
@@ -71,16 +172,19 @@ function doStep(){
   //select random Molecule
   var flag = true;
   while(flag){
-    var or_x = random(0, game_board.length);
-    var or_y = random(0, game_board[0].length);
+    var or_x = random(0, game_board.length - 1);
+    var or_y = random(0, game_board[0].length - 1);
     if (game_board[or_x][or_y]!=null){
       flag = false;
     }
   }
 
-  /*console.log("----------------dostep----------------------");
-  console.log("Origional: " + game_board[or_x][or_y]);
-  console.log("Origional: " + or_x + ":" + or_y);*/
+  if (debug){
+    console.log("----------------dostep----------------------");
+    console.log("Origional: " + game_board[or_x][or_y]);
+    console.log("Origional: " + or_x + ":" + or_y);
+  }
+
 
   var m1 = game_board[or_x][or_y];
   var m2 = new Molecule(game_board[or_x][or_y].type);
@@ -102,6 +206,7 @@ function doStep(){
   }
 
   var r = random(0, potential_spots.length - 1);
+
   var spot = potential_spots[r];
 
   var o_energy = calcEnergy(or_x, or_y, m1);
@@ -111,7 +216,10 @@ function doStep(){
   var odds = Math.pow(Math.E, -change_energy * delta);
   var roll = Math.random();
   if (roll < odds){
-    //console.log("HAPPENED")
+    if (debug){
+      console.log("HAPPENED")
+    }
+
     //molecule moves
 
 
@@ -121,14 +229,16 @@ function doStep(){
   }
 
 
+  if (debug){
+    console.log("Potential spots: " + potential_spots);
+    console.log("Spot: " + spot);
 
-  /*console.log("Potential spots: " + potential_spots);
-  console.log("Spot: " + spot);
+    console.log("m2: " + m2);
+    console.log("O Energy: " + o_energy);
+    console.log("N Energy: " + n_energy);
+    console.log("Odds: " + odds);
+  }
 
-  console.log("m2: " + m2);
-  console.log("O Energy: " + o_energy);
-  console.log("N Energy: " + n_energy);
-  console.log("Odds: " + odds);*/
 
 
 
@@ -139,11 +249,20 @@ function start(){
 
   canv = document.getElementById('canv');
   ctx = canv.getContext("2d");
-  num_rows = $("#rows").val();
-  num_cols = $("#cols").val();
-  concentration = $("#dist").val();
-  delta = $("#delta").val();
-  mtype = $("#mtype").val();
+  num_rows = $("#row").html();
+  num_cols = $("#col").html();
+  concentration = $("#conc").html();
+
+  if (document.getElementById('o').checked) {
+    mtype = 'o'
+  }
+  if (document.getElementById('h').checked) {
+    mtype = 'h'
+  }
+  if (document.getElementById('r').checked) {
+    mtype = 'r'
+  }
+
 
   o_img = new Image();
   o_img.src = 'o.png'
@@ -168,6 +287,11 @@ function start(){
 
 function draw(){
   ctx.clearRect(0, 0, canv.width, canv.height);
+  ctx.beginPath();
+  ctx.fillStyle = "#99d9ea";
+  ctx.fillRect(0, 0, canv.width, canv.height);
+  ctx.strokeStyle = "#99d9ea";
+  ctx.stroke();
   drawMolecules();
   drawBoard();
   //debug();
@@ -181,7 +305,7 @@ function drawBoard(){
     for (y = 0; y < num_rows; y++) {
       ctx.beginPath();
       ctx.rect(x * block_size, y * block_size, block_size, block_size);
-      ctx.strokeStyle = "#000000";
+      ctx.strokeStyle = "#99d9ea";
 	    ctx.stroke();
       //await sleep(2000);
 	  }
@@ -233,7 +357,10 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 function random(min, max) {
-  return Math.floor(Math.random() * (max - min) ) + min;
+  //return Math.floor(Math.random() * (max - min) ) + min;
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function debug(){
@@ -293,8 +420,8 @@ function injectMolecule(type){
   var m = new Molecule(mtype);
   var flag = true;
   while (flag){
-    var x = random(0, game_board.length);
-    var y = random(0, game_board[0].length);
+    var x = random(0, game_board.length-1);
+    var y = random(0, game_board[0].length-1);
     if (game_board[x][y] == null){
       game_board[x][y] = m;
       flag = false;
@@ -361,7 +488,7 @@ function getSquare(x, y, direction){
   //West
   if (direction == "w"){
     if (x == 0){
-      return [0, game_board.length - 1];
+      return [game_board.length - 1, y];
     }else{
       return [x - 1, y];
     }
